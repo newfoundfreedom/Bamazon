@@ -1,10 +1,10 @@
 // Dependency Loading and Global Variables
 const mysql = require('mysql'),
     Table = require('cli-table'),
-    inquirer = require('inquirer');
+    inquirer = require('inquirer'),
+    chalk = require('chalk');
 // initialize the following variables
-let itemQty,
-    table;
+let itemQty;
 
 
 // function to clear the current CLI screen
@@ -24,13 +24,13 @@ const connection = mysql.createConnection({
 
 
 // DB connect
-connection.connect(function (err) {
-    if (err) throw err;
-    // console.log("connected as id " + connection.threadId);
-});
+// connection.connect(function (err) {
+//     if (err) throw err;
+//     console.log("connected as id " + connection.threadId);
+// });
 
 
-// Grab all products from the DB
+// Grab all the products from the DB
 connection.query('SELECT * FROM `products`', function (err, res) {
     if (err) throw err;
 
@@ -40,47 +40,80 @@ connection.query('SELECT * FROM `products`', function (err, res) {
         , colWidths: [8, 50, 7]
     });
 
-    // Push each items ID, Name and Price to the table
-    for (item in res) {
+    // Push each product ID, Name & Price to the table
+    for (i in res) {
         let row = [];
-        row.push(res[item].id);
-        row.push(res[item].product_name);
-        row.push(res[item].price);
+        row.push(res[i].id);
+        row.push(res[i].product_name);
+        row.push(res[i].price);
         table.push(row);
+        // set item qty for input validation
         itemQty = table.length;
     }
-    // Clear screen and show table
+
+    // Clear screen and display table
     console.reset();
-    console.log('\n' + table.toString() + '\n\n');
+    console.log('\n' + table.toString() + '\n');
 
-    connection.end();
+    // connection.end();
 
+    // prompt customer for item id and,
+    // validate their response against the number of items available
     inquirer.prompt([
         {
             name: 'number',
-            message: 'Enter the item number for the product you want to purchase: ',
+            message: `Enter the item id for the product you'd like to purchase: `,
             validate: function (value) {
                 if (value > 0 && value <= itemQty) {
                     return true;
                 } else {
-                    return 'Please enter a valid item number';
+                    return 'Please enter a valid product id';
                 }
             }
         }
+        // once an item has been selected, prompt customer for quantity
+        // validate their response to only allow integers from 1 - 999
     ]).then(function (item) {
         inquirer.prompt({
             name: 'quantity',
             message: 'How many would you like to buy?',
             validate: function (value) {
-                var pass = value.match(/\d+/);
+                var pass = value.match(/^\d{1,3}$/);
                 if (pass) {
                     return true;
                 }
                 return 'Please enter a valid quantity';
             }
-        }).then(function (qty) {
-            console.log(item.number);
-            console.log(qty.quantity);
+        }).then(function (customer) {
+            // console.log(item.number);
+            // console.log(customer.quantity);
+
+            // DB connect
+            // connection.connect(function (err) {
+            //     if (err) throw err;
+            //     console.log("connected as id " + connection.threadId);
+            // });
+            connection.query('SELECT * FROM `products` WHERE id=?', [item.number], function (err, res) {
+                if (err) throw err;
+                // let resFormatted = (JSON.stringify(res, null, 2));
+                // console.log(resFormatted);
+                // console.log(resFormatted[0].stock_quantity);
+
+                if (res[0].stock_quantity < customer.quantity) {
+                    console.log(chalk.red('I\'m sorry there is insufficient inventory to fulfill your order.\n'));
+                } else {
+                    let newQty = res[0].stock_quantity - customer.quantity;
+                    connection.query("UPDATE products SET ? WHERE ?",
+                        [
+                            {stock_quantity: newQty},
+                            {id: item.number}
+                        ]
+                        , function (err, res) {
+                        });
+                }
+                // disconnect from DB
+                connection.end();
+            });
         })
 
     });
@@ -88,12 +121,6 @@ connection.query('SELECT * FROM `products`', function (err, res) {
 });
 
 
-// disconnect from DB
-
-
-// inquirer.prompt(itemNum).then(function (answers) {
-//     console.log(JSON.stringify(answers, null, '  '));
-// });
 
 
 
