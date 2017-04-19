@@ -55,14 +55,12 @@ connection.query('SELECT * FROM `products`', function (err, res) {
     console.reset();
     console.log('\n' + table.toString() + '\n');
 
-    // connection.end();
-
     // prompt customer for item id and,
     // validate their response against the number of items available
     inquirer.prompt([
         {
             name: 'number',
-            message: `Enter the item id for the product you'd like to purchase: `,
+            message: `Enter the Item # for the product you'd like to purchase: `,
             validate: function (value) {
                 if (value > 0 && value <= itemQty) {
                     return true;
@@ -71,37 +69,32 @@ connection.query('SELECT * FROM `products`', function (err, res) {
                 }
             }
         }
-        // once an item has been selected, prompt customer for quantity
-        // validate their response to only allow integers from 1 - 999
+
+        // once an item has been selected, prompt customer for quantity.
+        // Validate their response to only allow integers from 1 - 999
     ]).then(function (item) {
         inquirer.prompt({
             name: 'quantity',
             message: 'How many would you like to buy?',
             validate: function (value) {
-                var pass = value.match(/^\d{1,3}$/);
+                let pass = value.match(/^\d{1,3}$/);
                 if (pass) {
                     return true;
                 }
                 return 'Please enter a valid quantity';
             }
         }).then(function (customer) {
-            // console.log(item.number);
-            // console.log(customer.quantity);
 
-            // DB connect
-            // connection.connect(function (err) {
-            //     if (err) throw err;
-            //     console.log("connected as id " + connection.threadId);
-            // });
+            // Query the DB for item selected
             connection.query('SELECT * FROM `products` WHERE id=?', [item.number], function (err, res) {
                 if (err) throw err;
-                // let resFormatted = (JSON.stringify(res, null, 2));
-                // console.log(resFormatted);
-                // console.log(resFormatted[0].stock_quantity);
 
+                // Evaluate if there is enough quantity in stock to cover the order
+                // If not, alert customer
                 if (res[0].stock_quantity < customer.quantity) {
                     console.log(chalk.red('I\'m sorry there is insufficient inventory to fulfill your order.\n'));
                 } else {
+                    // If there is enough stock, then Update the DB record with reduced quantity
                     let newQty = res[0].stock_quantity - customer.quantity;
                     connection.query("UPDATE products SET ? WHERE ?",
                         [
@@ -113,11 +106,15 @@ connection.query('SELECT * FROM `products`', function (err, res) {
                 }
                 // disconnect from DB
                 connection.end();
+
+                // calculate customer total and format into $##.## and display
+                let total = res[0].price * customer.quantity;
+                let totalFormatted = parseFloat(total).toFixed(2);
+                console.log(chalk.green(`\nYour total comes to $${totalFormatted} \nThank You for your business!\n`));
             });
         })
 
     });
-
 });
 
 
