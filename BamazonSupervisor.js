@@ -83,7 +83,7 @@ let supervisorInterface = function () {
             default:
                 console.reset();
                 connection.end();
-                console.log(chalk.cyan('Good Bye'));
+                console.log(chalk.cyan('\nGood Bye\n'));
         }
     });
 };

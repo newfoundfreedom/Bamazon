@@ -80,7 +80,7 @@ let customerInterface = function () {
             case 'Exit Store':
                 console.reset();
                 connection.end();
-                console.log(chalk.cyan('Good-Bye. Thanks for visiting.'));
+                console.log(chalk.cyan('\nGood-Bye. Thanks for visiting.\n'));
                 break;
         }
     });
@@ -156,7 +156,6 @@ let makePurchase = function () {
                             [totalFormatted, {department_name: dept}],
                             function (err, res) {
                             });
-                        console.log(totalFormatted + "in department name = " + dept);
                     console.log(chalk.green(`\nYour total comes to $${totalFormatted} \nThank You for your business!\n`));
                     // once sale is finalized present customer with initial interface
                     customerInterface();
