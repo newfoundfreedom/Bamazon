@@ -1,8 +1,13 @@
 {
+  "name": "Bamazon",
+  "version": "0.0.1",
+  "main": "bamazonCustomer.js",
+  "repository": "https://github.com/newfoundfreedom/Bamazon.git",
+  "author": "Joel Roberts <newfoundfreedom@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "cli-table": "^0.3.1",
     "inquirer": "^3.0.6",
-    "mysql": "^2.13.0",
-    "prompt": "^1.0.0"
+    "mysql": "^2.13.0"
   }
 }

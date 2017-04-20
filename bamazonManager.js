@@ -14,6 +14,16 @@ console.reset = function () {
 };
 
 
+// MySQL connection parameters
+const connection = mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "",
+    database: "Bamazon"
+});
+
+
 // Function to render products table,
 //  create Table - setup structure and headers
 let renderTable = function (res) {
@@ -45,16 +55,6 @@ let renderTable = function (res) {
     console.reset();
     console.log('\n' + table.toString() + '\n');
 };
-
-
-// MySQL connection parameters
-const connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "",
-    database: "Bamazon"
-});
 
 
 // Manager Interface function
@@ -92,7 +92,7 @@ let managerInterface = function () {
             default:
                 console.reset();
                 connection.end();
-                console.log('Good Bye');
+                console.log(chalk.cyan('Good Bye'));
         }
     });
 };
@@ -119,8 +119,8 @@ let addInventory = function () {
                 }
             }
 
-            // once an item has been selected, prompt manager for quantity to add
-            // Validate their response to only allow integers
+        // once an item has been selected, prompt manager for quantity to add
+        // Validate their response to only allow integers
         ]).then(function (item) {
             inquirer.prompt({
                 name: 'quantity',
@@ -196,6 +196,7 @@ let addProduct = function () {
     })
 };
 
+console.reset();
 managerInterface();
 
 
