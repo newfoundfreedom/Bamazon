@@ -8,7 +8,7 @@ CREATE TABLE products(
   department_name VARCHAR(255) NOT NULL,
   price FLOAT DEFAULT 0 NOT NULL,
   stock_quantity INT(11) DEFAULT 0 NOT NULL,
-  product_sales FLOAT DEFAULT 0 NOT NULL,
+  total_sales FLOAT DEFAULT 0 NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -50,7 +50,8 @@ CREATE TABLE departments(
   department_id INT(11) AUTO_INCREMENT NOT NULL,
   department_name VARCHAR(255) NOT NULL,
   over_head_costs FLOAT DEFAULT 0 NOT NULL,
-  total_sales FLOAT DEFAULT 0 NOT NULL,
+  product_sales FLOAT DEFAULT 0 NOT NULL,
+  total_profit FLOAT DEFAULT 0 NOT NULL,
   PRIMARY KEY (department_id)
 );
 

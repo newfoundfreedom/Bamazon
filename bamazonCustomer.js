@@ -148,11 +148,11 @@ let makePurchase = function () {
                     let total = res[0].price * customer.quantity;
                     let totalFormatted = parseFloat(total).toFixed(2);
                     let dept = res[0].department_name;
-                        connection.query("UPDATE `products` SET `product_sales` = `product_sales` + ? WHERE ?",
+                        connection.query("UPDATE `products` SET `total_sales` = `total_sales` + ? WHERE ?",
                             [totalFormatted, {id: item.number}],
                             function (err, res) {
                             });
-                        connection.query("UPDATE `departments` SET `total_sales` = `total_sales` + ? WHERE ?",
+                        connection.query("UPDATE `departments` SET `product_sales` = `product_sales` + ? WHERE ?",
                             [totalFormatted, {department_name: dept}],
                             function (err, res) {
                             });

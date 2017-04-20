@@ -159,7 +159,7 @@ let addInventory = function () {
     });
 };
 
-// Add Inventory function
+// Add Product function
 let addProduct = function () {
     inquirer.prompt([
         {
@@ -186,7 +186,7 @@ let addProduct = function () {
             stock_quantity: data.qty
         }, function (err, res) {
             if (err) throw err;
-            // update table to reflect changes made to quantities
+            // update table to reflect changes made
             connection.query('SELECT * FROM `products`', function (err, res) {
                 if (err) throw err;
                 renderTable(res);
