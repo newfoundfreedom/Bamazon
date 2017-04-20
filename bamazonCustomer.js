@@ -135,18 +135,30 @@ let makePurchase = function () {
                     } else {
                         // If there is enough stock, then Update the DB record with reduced quantity
                         let newQty = res[0].stock_quantity - customer.quantity;
-                        connection.query("UPDATE products SET ? WHERE ?",
+                        connection.query("UPDATE `products` SET ? WHERE ?",
                             [
                                 {stock_quantity: newQty},
                                 {id: item.number}
                             ]
                             , function (err, res) {
                             });
-                    // calculate customer total and format into $##.## and display
+                    // calculate customer total and format into $##.##, display
+                    //  total for customer for sale and add sales total to
+                    //  product sales column
                     let total = res[0].price * customer.quantity;
                     let totalFormatted = parseFloat(total).toFixed(2);
+                    let dept = res[0].department_name;
+                        connection.query("UPDATE `products` SET `product_sales` = `product_sales` + ? WHERE ?",
+                            [totalFormatted, {id: item.number}],
+                            function (err, res) {
+                            });
+                        connection.query("UPDATE `departments` SET `total_sales` = `total_sales` + ? WHERE ?",
+                            [totalFormatted, {department_name: dept}],
+                            function (err, res) {
+                            });
+                        console.log(totalFormatted + "in department name = " + dept);
                     console.log(chalk.green(`\nYour total comes to $${totalFormatted} \nThank You for your business!\n`));
-
+                    // once sale is finalized present customer with initial interface
                     customerInterface();
                     }
 
@@ -160,5 +172,16 @@ let makePurchase = function () {
 customerInterface();
 
 
-
+// connection.query('SELECT * FROM `products` WHERE id=?', [item.number], function (err, res) {
+//     if (err) throw err;
+//     // Calculate what the new quantity will be
+//     let newQty = (res[0].stock_quantity + parseInt(manager.quantity));
+//     // Query the DB for item selected
+//     connection.query('UPDATE products SET ? WHERE ?',
+//         [
+//             {stock_quantity: newQty},
+//             {id: item.number}
+//         ]
+//         , function (err, res) {
+//             if (err) throw err;
 
