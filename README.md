@@ -1,6 +1,6 @@
 # Bamazon (because CLI shopping is all the rage)
 
-*Bamazon is a CLI storefront utilizing node.js and MySQL where you can outfit your favorite nerd.
+*Bamazon is a CLI storefront utilizing node.js and MySQL where you can outfit your favorite nerd.*
 <br>
 <br>
 ![](BamazonActionShot.png)
