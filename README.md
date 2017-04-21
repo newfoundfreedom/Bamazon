@@ -4,8 +4,10 @@
 <br>
 <br>
 ![](BamazonActionShot.png)
- <br>
- 
+<br>
+<br>
+## [Click here to see Bamazon in Action](https://www.youtube.com/watch?v=das5DuKwzsM)
+<br>
 ## Installation
 To install Bamazon, first clone the repo by pasting the following into your Terminal window:
 ```
