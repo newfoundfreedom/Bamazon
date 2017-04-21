@@ -5,8 +5,20 @@
 ![](BamazonActionShot.png)
  <br>
  
- ## Execution
- There are three unique application environments within Bamazon. Customer, Manager & Supervisor. They can be run with one of the following three commands:
+## Installation
+To install Bamazon, first clone the repo by pasting the following into your Terminal window:
+```
+  git clone git@github.com:newfoundfreedom/Bamazon.git
+  ```
+  
+Next, Bamazon is dependent on the following NPM packages: [mysql](https://www.npmjs.com/package/inquirer), [cli-table](https://www.npmjs.com/package/cli-table), [inquirer](https://www.npmjs.com/package/inquirer) and [chalk](https://www.npmjs.com/package/chalk). You can easily install them by typing the following: 
+```
+yarn install
+```
+
+## Execution
+ There are three unique application environments within Bamazon. **Customer**, **Manager** & **Supervisor**. 
+ They can be run with one of the following three commands:
  ```
  node bamazonCustomer.js
  ```
@@ -19,13 +31,4 @@
   
   <br>
   
-## Installation
-To install Bamazon, first clone the repo by pasting the following into your Terminal window:
-```
-  git clone git@github.com:newfoundfreedom/Bamazon.git
-  ```
-  
-Next, Bamazon is dependent on the following NPM packages: [mysql](https://www.npmjs.com/package/inquirer), [cli-table](https://www.npmjs.com/package/cli-table), [inquirer](https://www.npmjs.com/package/inquirer) and [chalk](https://www.npmjs.com/package/chalk). You can easily install them by typing the following: 
-```
-yarn install
-```
+
